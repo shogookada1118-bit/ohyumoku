@@ -30,12 +30,20 @@
       <div class="orb" id="orb" role="button" tabindex="0" aria-label="触れる"></div>
     </div>
 
-    <div class="reveal" id="reveal" hidden>
-      <p class="reveal__label">あなたの人生の</p>
-      <p class="reveal__title">「給与依存率」</p>
-      <button class="reveal__value" id="valueBtn" type="button" aria-label="給与依存率を確かめる">
-        <span>[ &nbsp;？？？&nbsp; % ]</span>
-      </button>
+    <div class="capsule-wrap" id="capsuleWrap" hidden>
+      <div class="capsule-halo" aria-hidden="true"></div>
+      <svg class="capsule" id="capsule" viewBox="0 0 60 84" role="button" tabindex="0" aria-label="触れる">
+        <defs>
+          <radialGradient id="capsuleGlow" cx="40%" cy="30%" r="70%">
+            <stop offset="0%" stop-color="#fffef9" />
+            <stop offset="55%" stop-color="#f4ecd8" />
+            <stop offset="100%" stop-color="#dcccA0" />
+          </radialGradient>
+        </defs>
+        <path class="capsule__body" d="M30 4C43 4 51 23 51 44C51 66 43 80 30 80C17 80 9 66 9 44C9 23 17 4 30 4Z" fill="url(#capsuleGlow)" />
+        <path class="capsule__seam" d="M30 11 L30 73" />
+        <circle class="capsule__glint" cx="21" cy="25" r="3.5" />
+      </svg>
     </div>
 
   </section>
@@ -52,7 +60,7 @@
       </svg>
     </div>
 
-    <p class="lock-status" id="lockStatus">🔒 未測定</p>
+    <p class="lock-lead" id="lockLead">これを、開けるには。</p>
 
     <div class="question" id="question">
       <p class="question__line">明日から、日本中の「給料」という仕組みが</p>
@@ -83,6 +91,15 @@
   <!-- ===================== SCENE 3 : UNLOCK / SPROUT ===================== -->
   <section class="scene scene--unlock" id="scene-unlock" aria-label="世界の変化">
     <div class="grain" aria-hidden="true"></div>
+    <div class="world-tint" id="worldTint" aria-hidden="true"></div>
+
+    <div class="get-flash" id="getFlash" aria-hidden="true">
+      <div class="get-flash__core"></div>
+      <div class="get-flash__spark get-flash__spark--1"></div>
+      <div class="get-flash__spark get-flash__spark--2"></div>
+      <div class="get-flash__spark get-flash__spark--3"></div>
+      <div class="get-flash__spark get-flash__spark--4"></div>
+    </div>
 
     <p class="dependency" id="dependency">
       <span class="dependency__label">給与依存率</span>

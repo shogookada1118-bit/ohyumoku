@@ -77,6 +77,25 @@
     } catch (e) {}
   }
 
+  function playArriveChime() {
+    var ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      tone(ctx, 880, 0, 0.7, 0.035, 'sine');
+      tone(ctx, 1320, 0.12, 0.6, 0.025, 'sine');
+    } catch (e) {}
+  }
+
+  function playGetSparkle() {
+    var ctx = ensureAudio();
+    if (!ctx) return;
+    try {
+      tone(ctx, 1980, 0, 0.5, 0.03, 'sine');
+      tone(ctx, 2640, 0.06, 0.4, 0.02, 'sine');
+      tone(ctx, 3520, 0.11, 0.35, 0.012, 'sine');
+    } catch (e) {}
+  }
+
   /* ---------------------------------------------------------
      2. scene wipe transition
      --------------------------------------------------------- */
@@ -112,10 +131,11 @@
   var rippleLayer = document.getElementById('rippleLayer');
   var orb = document.getElementById('orb');
   var orbWrap = document.getElementById('orbWrap');
-  var reveal = document.getElementById('reveal');
-  var valueBtn = document.getElementById('valueBtn');
+  var capsuleWrap = document.getElementById('capsuleWrap');
+  var capsule = document.getElementById('capsule');
 
-  var hasRevealed = false;
+  var hasManifested = false;
+  var hasSealed = false;
 
   function spawnRipple(x, y) {
     var r = document.createElement('div');
@@ -142,56 +162,81 @@
     spawnRipple(p.x, p.y);
   });
 
-  function doReveal() {
-    if (hasRevealed) return;
-    hasRevealed = true;
+  /* step 1 — the void is touched, and something desirable arrives */
+  function manifestDesire() {
+    if (hasManifested) return;
+    hasManifested = true;
     ensureAudio();
+    playArriveChime();
     orbWrap.classList.add('is-hidden');
-    reveal.hidden = false;
+    capsuleWrap.hidden = false;
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        capsuleWrap.classList.add('is-visible');
+      });
+    });
   }
 
-  orb.addEventListener('click', doReveal);
+  orb.addEventListener('click', manifestDesire);
   orb.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
-      doReveal();
+      manifestDesire();
     }
   });
 
-  /* subtle parallax on the orb, mouse or touch — no permission prompts */
+  /* subtle parallax, mouse or touch — no permission prompts */
   sceneCanvas.addEventListener('pointermove', function (e) {
-    if (hasRevealed) return;
+    if (hasSealed) return;
     var w = window.innerWidth,
       h = window.innerHeight;
     var dx = (e.clientX / w - 0.5) * 10;
     var dy = (e.clientY / h - 0.5) * 10;
-    orbWrap.style.transform = 'translate(' + dx + 'px,' + dy + 'px)';
+    var t = 'translate(' + dx + 'px,' + dy + 'px)';
+    orbWrap.style.transform = t;
+    capsuleWrap.style.transform = t;
   });
 
   /* ---------------------------------------------------------
-     4. LOCK transition (triggered from the value button)
+     4. step 2 — touching the desired thing seals it shut,
+     then LOCK reveals only the icon; the question itself
+     stays silent for a beat before it ever appears
      --------------------------------------------------------- */
-  valueBtn.addEventListener('click', function (e) {
-    var rect = valueBtn.getBoundingClientRect();
-    var x = rect.left + rect.width / 2;
-    var y = rect.top + rect.height / 2;
-    playLockThud();
-    wipe(
-      x,
-      y,
-      'var(--color-lock-bg)',
-      function () {
-        sceneCanvas.classList.remove('is-active');
-        sceneLock.classList.add('is-active');
-        restartQuestionAnimation();
-      },
-      function () {}
-    );
+  function sealAndLock() {
+    if (hasSealed) return;
+    hasSealed = true;
+    capsule.classList.add('is-sealing');
+
+    setTimeout(function () {
+      var rect = capsule.getBoundingClientRect();
+      var x = rect.left + rect.width / 2;
+      var y = rect.top + rect.height / 2;
+      playLockThud();
+      wipe(
+        x,
+        y,
+        'var(--color-lock-bg)',
+        function () {
+          sceneCanvas.classList.remove('is-active');
+          sceneLock.classList.add('is-active');
+          restartQuestionAnimation();
+        },
+        function () {}
+      );
+    }, 380);
+  }
+
+  capsule.addEventListener('click', sealAndLock);
+  capsule.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      sealAndLock();
+    }
   });
 
-  /* replay the staggered question fade-in each time the lock scene opens */
+  /* replay the staggered reveal each time the lock scene opens */
   function restartQuestionAnimation() {
-    var els = document.querySelectorAll('.lock-icon, .lock-status, .question__line, .input-area');
+    var els = document.querySelectorAll('.lock-icon, .lock-lead, .question__line, .input-area');
     els.forEach(function (el) {
       el.style.animation = 'none';
       // eslint-disable-next-line no-unused-expressions
@@ -242,7 +287,7 @@
         function () {
           sceneLock.classList.remove('is-active');
           sceneUnlock.classList.add('is-active');
-          runGrowthSequence();
+          runRewardSequence();
         },
         function () {}
       );
@@ -250,37 +295,52 @@
   }
 
   /* ---------------------------------------------------------
-     6. SCENE 3 — dependency reveal → seed → sprout → sway
+     6. SCENE 3 — GET the seed of light → world warms →
+     dependency insight → seed → sprout → sway
      --------------------------------------------------------- */
+  var getFlash = document.getElementById('getFlash');
+  var worldTint = document.getElementById('worldTint');
   var seed = document.getElementById('seed');
   var cracks = document.getElementById('cracks');
   var sprout = document.getElementById('sprout');
   var finalLine = document.getElementById('finalLine');
   var grown = false;
 
-  function runGrowthSequence() {
+  function runRewardSequence() {
     if (grown) return;
     grown = true;
 
+    /* the tangible GET — a seed of light arrives, right as the
+       world turns from indigo back to open air */
+    setTimeout(function () {
+      playGetSparkle();
+      getFlash.classList.add('is-bursting');
+    }, 120);
+
+    /* the world itself changes — a slow warmth spreads in */
+    setTimeout(function () {
+      worldTint.classList.add('is-warming');
+    }, 1500);
+
     setTimeout(function () {
       seed.classList.add('is-falling');
-    }, 2000);
+    }, 3200);
 
     setTimeout(function () {
       cracks.classList.add('is-cracking');
-    }, 2850);
+    }, 4050);
 
     setTimeout(function () {
       sprout.classList.add('is-growing');
-    }, 3050);
+    }, 4250);
 
     setTimeout(function () {
       sprout.classList.add('is-swaying');
-    }, 4650);
+    }, 5850);
 
     setTimeout(function () {
       finalLine.classList.add('is-visible');
-    }, 5200);
+    }, 6400);
   }
 
   /* ---------------------------------------------------------
