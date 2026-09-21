@@ -102,8 +102,8 @@
     </div>
 
     <p class="dependency" id="dependency">
-      <span class="dependency__label">給与依存率</span>
-      <span class="dependency__value">100<span class="dependency__pct">%</span></span>
+      <span class="dependency__label" id="dependencyLabel">給与依存率</span>
+      <span class="dependency__value" id="dependencyValue">100<span class="dependency__pct">%</span></span>
     </p>
     <p class="dependency__note" id="dependencyNote">生命維持のすべてが、外部の単一蛇口に握られている状態。</p>
 
@@ -120,12 +120,46 @@
         <path class="sprout__stem" d="M60 150 C 60 120, 58 90, 60 60" />
         <path class="sprout__leaf sprout__leaf--l" d="M60 84 C 34 82, 20 66, 18 42 C 46 44, 58 60, 60 84 Z" />
         <path class="sprout__leaf sprout__leaf--r" d="M60 68 C 86 66, 100 50, 102 26 C 74 28, 62 44, 60 68 Z" />
+        <path class="sprout__leaf sprout__leaf--3" d="M60 66 C 46 62, 40 50, 42 36 C 58 40, 62 52, 60 66 Z" />
       </svg>
 
       <div class="ground-line" aria-hidden="true"></div>
+
+      <svg class="root" id="root" viewBox="0 0 56 40" aria-hidden="true">
+        <path class="root__main" d="M28 0 C 23 10, 19 20, 15 36" />
+        <path class="root__deep" d="M28 5 C 33 16, 37 26, 41 38" />
+      </svg>
     </div>
 
     <p class="final-line" id="finalLine">ここから、すべてが始まる。</p>
+
+    <!-- ================= the first real-world step ================= -->
+    <p class="step-lead" id="stepLead">では、ひとつだけ。</p>
+    <p class="step-question" id="stepQuestion">今日、現実で<br />何を動かしますか。</p>
+
+    <div class="step-input-area" id="stepInputArea">
+      <input
+        type="text"
+        id="stepInput"
+        class="step-input"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="……ここに、決めたことを。"
+        aria-label="今日動かす、たったひとつのこと"
+      />
+      <div class="step-rule"></div>
+    </div>
+
+    <div class="step-ghost" id="stepGhost" aria-hidden="true"></div>
+
+    <p class="step-lock-msg" id="stepLockMsg">それを、やってきてください。</p>
+
+    <!-- ================= return visit: quiet re-display + real-growth trigger ================= -->
+    <div class="return-view" id="returnView" hidden>
+      <p class="return-step" id="returnStep"></p>
+      <button type="button" class="return-done" id="returnDoneBtn">動かした</button>
+    </div>
   </section>
 
   <button class="replay" id="replayBtn" type="button" aria-label="もう一度はじめから">◦</button>

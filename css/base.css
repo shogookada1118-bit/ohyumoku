@@ -71,6 +71,19 @@ li {
   }
 }
 
+/* used briefly on <html> while JS restores a returning visitor straight into
+   an already-grown state, so the settle happens silently instead of
+   replaying every reveal animation from the start */
+.is-restoring,
+.is-restoring *,
+.is-restoring *::before,
+.is-restoring *::after {
+  animation-duration: 0.01ms !important;
+  animation-delay: 0.01ms !important;
+  transition-duration: 0.01ms !important;
+  transition-delay: 0.01ms !important;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
