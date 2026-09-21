@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+<title>大夢木 — TIME TREE</title>
+<meta name="description" content="時流教養 VOL.2「大夢木」。現実世界で本人が行動することで、白紙の人生に最初の芽が生まれる、最初の10分の体験。" />
+<meta name="theme-color" content="#0b0e14" />
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@300;400;500&display=swap" rel="stylesheet" />
+
+<link rel="stylesheet" href="./css/base.css" />
+<link rel="stylesheet" href="./css/style.css" />
+
+<!-- Minimal inline SVG favicon: a single seed/sprout mark -->
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230b0e14'/%3E%3Cpath d='M16 26V15' stroke='%236f9a6e' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3Cpath d='M16 16c0-5 -6-4-6-9 5 0 6 5 6 9z' fill='%236f9a6e'/%3E%3C/svg%3E" />
+</head>
+<body>
+
+<main id="stage" aria-live="polite">
+
+  <!-- ===================== SCENE 1 : WHITE CANVAS ===================== -->
+  <section class="scene scene--canvas is-active" id="scene-canvas" aria-label="白紙の世界">
+    <div class="grain" aria-hidden="true"></div>
+    <div class="ripple-layer" id="rippleLayer" aria-hidden="true"></div>
+
+    <div class="orb-wrap" id="orbWrap">
+      <div class="orb" id="orb" role="button" tabindex="0" aria-label="触れる"></div>
+    </div>
+
+    <div class="reveal" id="reveal" hidden>
+      <p class="reveal__label">あなたの人生の</p>
+      <p class="reveal__title">「給与依存率」</p>
+      <button class="reveal__value" id="valueBtn" type="button" aria-label="給与依存率を確かめる">
+        <span>[ &nbsp;？？？&nbsp; % ]</span>
+      </button>
+    </div>
+
+  </section>
+
+  <!-- ===================== SCENE 2 : LOCK / QUESTION ===================== -->
+  <section class="scene scene--lock" id="scene-lock" aria-label="問い">
+    <div class="lock-glow" aria-hidden="true"></div>
+
+    <div class="lock-icon" id="lockIcon" aria-hidden="true">
+      <svg viewBox="0 0 48 48" fill="none">
+        <rect x="12" y="22" width="24" height="18" rx="2" stroke="currentColor" stroke-width="1.4"/>
+        <path d="M17 22v-6a7 7 0 0 1 14 0v6" stroke="currentColor" stroke-width="1.4"/>
+        <circle cx="24" cy="30" r="1.6" fill="currentColor"/>
+      </svg>
+    </div>
+
+    <p class="lock-status" id="lockStatus">🔒 未測定</p>
+
+    <div class="question" id="question">
+      <p class="question__line">明日から、日本中の「給料」という仕組みが</p>
+      <p class="question__line">完全に消滅します。</p>
+      <p class="question__line question__line--space">会社員も、バイトも、派遣も、すべて消えた。</p>
+      <p class="question__line">誰かに雇われることも、二度とできない。</p>
+      <p class="question__line question__line--emphasis">あなたは今月、どうやって生きますか。</p>
+    </div>
+
+    <div class="input-area" id="inputArea">
+      <p class="input-hint">思いつかないなら、通帳か明細を見てきてください。<br />答えは画面の外にあります。</p>
+      <input
+        type="text"
+        id="answerInput"
+        class="answer-input"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+        placeholder="……ここに、今の答えを。"
+        aria-label="あなたの答え"
+      />
+      <div class="answer-rule"></div>
+    </div>
+
+    <div class="absorb-ghost" id="absorbGhost" aria-hidden="true"></div>
+  </section>
+
+  <!-- ===================== SCENE 3 : UNLOCK / SPROUT ===================== -->
+  <section class="scene scene--unlock" id="scene-unlock" aria-label="世界の変化">
+    <div class="grain" aria-hidden="true"></div>
+
+    <p class="dependency" id="dependency">
+      <span class="dependency__label">給与依存率</span>
+      <span class="dependency__value">100<span class="dependency__pct">%</span></span>
+    </p>
+    <p class="dependency__note" id="dependencyNote">生命維持のすべてが、外部の単一蛇口に握られている状態。</p>
+
+    <div class="grow-field" id="growField">
+      <div class="seed" id="seed" aria-hidden="true"></div>
+
+      <svg class="cracks" id="cracks" viewBox="0 0 200 40" aria-hidden="true">
+        <path d="M100 6 L94 20 L104 18 L98 34" />
+        <path d="M100 6 L112 16 L106 26 L116 32" />
+        <path d="M100 6 L86 14 L92 24 L82 30" />
+      </svg>
+
+      <svg class="sprout" id="sprout" viewBox="0 0 120 160" aria-hidden="true">
+        <path class="sprout__stem" d="M60 150 C 60 120, 58 90, 60 60" />
+        <path class="sprout__leaf sprout__leaf--l" d="M60 84 C 34 82, 20 66, 18 42 C 46 44, 58 60, 60 84 Z" />
+        <path class="sprout__leaf sprout__leaf--r" d="M60 68 C 86 66, 100 50, 102 26 C 74 28, 62 44, 60 68 Z" />
+      </svg>
+
+      <div class="ground-line" aria-hidden="true"></div>
+    </div>
+
+    <p class="final-line" id="finalLine">ここから、すべてが始まる。</p>
+  </section>
+
+  <button class="replay" id="replayBtn" type="button" aria-label="もう一度はじめから">◦</button>
+
+</main>
+
+<script src="./js/app.js"></script>
+</body>
+</html>
